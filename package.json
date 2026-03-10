@@ -2,12 +2,12 @@
   "name": "wa-socket",
   "version": "1.0.0",
   "description": "WhatsApp Web Socket API",
-  "main": "dist/server.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "tsx watch src/server.ts",
-    "start": "node dist/server.js",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
     "test": "vitest",
     "test:run": "vitest run"
   },
