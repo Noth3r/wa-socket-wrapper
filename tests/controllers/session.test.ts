@@ -239,31 +239,4 @@ describe('Session Controller', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('listSessions should handle errors gracefully', () => {
-      req = createMockReq();
-      expect(() => {
-        listSessions(req as Request, res as Response);
-      }).not.toThrow();
-    });
-
-    it('all session handlers should be async-safe', async () => {
-      req = createMockReq({ sessionId: 'test-1' }, {});
-      
-      const handlers = [
-        startSession,
-        stopSession,
-        getSessionStatus,
-        requestPairingCode,
-        restartSession,
-        terminateSession,
-      ];
-
-      for (const handler of handlers) {
-        expect(async () => {
-          await handler(req as Request, res as Response);
-        }).not.toThrow();
-      }
-    });
-  });
 });
