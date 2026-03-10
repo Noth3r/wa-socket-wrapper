@@ -76,7 +76,7 @@ Build a lightweight, production-ready REST API server that wraps Baileys for Wha
 - [ ] `npm test` passes all tests (vitest)
 - [x] `npm start` boots server successfully, healthcheck responds
 - [ ] Session can be started, QR scanned, messages sent/received
-- [ ] All 100+ endpoints return proper responses
+- [x] All 100+ endpoints return proper responses
 - [ ] Webhook fires on incoming messages
 - [ ] Docker build succeeds and container runs
 
