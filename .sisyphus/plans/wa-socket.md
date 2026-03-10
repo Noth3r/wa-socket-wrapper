@@ -2612,10 +2612,10 @@ docker run -p 3000:3000 wa-socket  # Expected: container starts, healthcheck pas
 ```
 
 ### Final Checklist
-- [ ] All "Must Have" present
-- [ ] All "Must NOT Have" absent
+- [x] All "Must Have" present
+- [x] All "Must NOT Have" absent
 - [ ] All vitest tests pass
-- [ ] TypeScript compiles with zero errors in strict mode
+- [x] TypeScript compiles with zero errors in strict mode
 - [ ] Docker builds and runs successfully
-- [ ] Swagger docs serve at /api-docs
+- [x] Swagger docs serve at /api-docs
 - [ ] Server handles 5+ concurrent sessions without crash
