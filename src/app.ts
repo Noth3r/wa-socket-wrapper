@@ -18,10 +18,9 @@ export function createApp(): Express {
   app.use(httpLogger);
 
   // Swagger documentation (if enabled) - BEFORE auth middleware
-  console.log('[DEBUG] ENABLE_SWAGGER:', config.ENABLE_SWAGGER);
+  logger.debug({ enableSwagger: config.ENABLE_SWAGGER }, 'Swagger configuration');
   if (config.ENABLE_SWAGGER) {
-    console.log('[SWAGGER] Registering Swagger UI at /api-docs');
-    logger.info('[SWAGGER] Registering Swagger UI at /api-docs');
+    logger.info('Registering Swagger UI at /api-docs');
     logger.info(`[SWAGGER] Spec has ${Object.keys(swaggerSpec.paths || {}).length} paths`);
     
     // Swagger UI - correct pattern: serve first, then setup
@@ -32,14 +31,13 @@ export function createApp(): Express {
     }));
     
     // JSON spec endpoint
-    app.get('/api-docs.json', (req: Request, res: Response) => {
+    app.get('/api-docs/json', (req: Request, res: Response) => {
       res.json(swaggerSpec);
     });
     
-    console.log('[SWAGGER] Swagger routes registered successfully');
-    logger.info('[SWAGGER] Swagger routes registered successfully');
+    logger.info('Swagger routes registered successfully');
   } else {
-    console.log('[SWAGGER] Swagger is DISABLED');
+    logger.info('Swagger is DISABLED');
   }
 
   app.use(apiKeyAuth);

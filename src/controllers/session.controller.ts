@@ -4,6 +4,7 @@ import { sessionManager } from '../services/session-manager.js';
 import { sseManager } from '../services/sse.js';
 import { webhookDispatcher } from '../services/webhook.js';
 import { ValidationError, SessionNotFoundError } from '../utils/errors.js';
+import { logger } from '../logger.js';
 import type { SessionId } from '../types/index.js';
 import { createSessionId } from '../types/index.js';
 import qrcode from 'qrcode';
@@ -176,7 +177,7 @@ export async function deleteInactiveSessions(req: Request, res: Response): Promi
       terminatedCount++;
     } catch (error) {
       // Log but continue
-      console.error(`Failed to terminate session ${session.id}:`, error);
+      logger.error({ sessionId: session.id, error }, `Failed to terminate session ${session.id}`);
     }
   }
 
@@ -197,7 +198,7 @@ export async function deleteAllSessions(req: Request, res: Response): Promise<vo
       terminatedCount++;
     } catch (error) {
       // Log but continue
-      console.error(`Failed to terminate session ${session.id}:`, error);
+      logger.error({ sessionId: session.id, error }, `Failed to terminate session ${session.id}`);
     }
   }
 
