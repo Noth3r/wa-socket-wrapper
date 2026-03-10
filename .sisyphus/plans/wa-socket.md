@@ -73,12 +73,12 @@ Build a lightweight, production-ready REST API server that wraps Baileys for Wha
 
 ### Definition of Done
 - [x] `npm run build` compiles without errors
-- [ ] `npm test` passes all tests (vitest)
+- [x] `npm test` passes all tests (vitest)
 - [x] `npm start` boots server successfully, healthcheck responds
-- [ ] Session can be started, QR scanned, messages sent/received
+- [x] Session can be started, QR scanned, messages sent/received
 - [x] All 100+ endpoints return proper responses
 - [ ] Webhook fires on incoming messages
-- [ ] Docker build succeeds and container runs
+- [x] Docker build succeeds and container runs
 
 ### Must Have
 - TypeScript strict mode throughout
@@ -280,8 +280,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/setup.test.ts`
-  - [ ] `npx vitest run` → PASS (1 test, 0 failures)
+  - [x] Test file created: `tests/setup.test.ts`
+  - [x] `npx vitest run` → PASS (1 test, 0 failures)
 
   **QA Scenarios:**
 
@@ -375,8 +375,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/types.test.ts`
-  - [ ] `npx vitest run tests/types.test.ts` → PASS
+  - [x] Test file created: `tests/types.test.ts`
+  - [x] `npx vitest run tests/types.test.ts` → PASS
 
   **QA Scenarios:**
 
@@ -455,8 +455,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/config.test.ts`
-  - [ ] `npx vitest run tests/config.test.ts` → PASS (at least 5 tests)
+  - [x] Test file created: `tests/config.test.ts`
+  - [x] `npx vitest run tests/config.test.ts` → PASS (at least 5 tests)
 
   **QA Scenarios:**
 
@@ -525,8 +525,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/logger.test.ts`
-  - [ ] `npx vitest run tests/logger.test.ts` → PASS
+  - [x] Test file created: `tests/logger.test.ts`
+  - [x] `npx vitest run tests/logger.test.ts` → PASS
 
   **QA Scenarios:**
 
@@ -597,8 +597,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/utils.test.ts`
-  - [ ] `npx vitest run tests/utils.test.ts` → PASS (at least 10 tests)
+  - [x] Test file created: `tests/utils.test.ts`
+  - [x] `npx vitest run tests/utils.test.ts` → PASS (at least 10 tests)
 
   **QA Scenarios:**
 
@@ -703,8 +703,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/services/session-manager.test.ts`
-  - [ ] `npx vitest run tests/services/session-manager.test.ts` → PASS (at least 8 tests)
+  - [x] Test file created: `tests/services/session-manager.test.ts`
+  - [x] `npx vitest run tests/services/session-manager.test.ts` → PASS (at least 8 tests)
 
   **QA Scenarios:**
 
@@ -798,8 +798,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/services/store.test.ts`
-  - [ ] `npx vitest run tests/services/store.test.ts` → PASS (at least 8 tests)
+  - [x] Test file created: `tests/services/store.test.ts`
+  - [x] `npx vitest run tests/services/store.test.ts` → PASS (at least 8 tests)
 
   **QA Scenarios:**
 
@@ -882,8 +882,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/middleware.test.ts`
-  - [ ] `npx vitest run tests/middleware.test.ts` → PASS (at least 10 tests)
+  - [x] Test file created: `tests/middleware.test.ts`
+  - [x] `npx vitest run tests/middleware.test.ts` → PASS (at least 10 tests)
 
   **QA Scenarios:**
 
@@ -961,8 +961,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/services/webhook.test.ts`
-  - [ ] `npx vitest run tests/services/webhook.test.ts` → PASS (at least 5 tests)
+  - [x] Test file created: `tests/services/webhook.test.ts`
+  - [x] `npx vitest run tests/services/webhook.test.ts` → PASS (at least 5 tests)
 
   **QA Scenarios:**
 
@@ -1035,8 +1035,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/services/websocket.test.ts`
-  - [ ] `npx vitest run tests/services/websocket.test.ts` → PASS (at least 4 tests)
+  - [x] Test file created: `tests/services/websocket.test.ts`
+  - [x] `npx vitest run tests/services/websocket.test.ts` → PASS (at least 4 tests)
 
   **QA Scenarios:**
 
@@ -1119,8 +1119,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/services/media.test.ts`
-  - [ ] `npx vitest run tests/services/media.test.ts` → PASS (at least 5 tests)
+  - [x] Test file created: `tests/services/media.test.ts`
+  - [x] `npx vitest run tests/services/media.test.ts` → PASS (at least 5 tests)
 
   **QA Scenarios:**
 
@@ -1204,8 +1204,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/controllers/session.test.ts`
-  - [ ] `npx vitest run tests/controllers/session.test.ts` → PASS (at least 8 tests)
+  - [x] Test file created: `tests/controllers/session.test.ts`
+  - [x] `npx vitest run tests/controllers/session.test.ts` → PASS (at least 8 tests)
 
   **QA Scenarios:**
 
@@ -1319,8 +1319,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/controllers/client.test.ts`
-  - [ ] `npx vitest run tests/controllers/client.test.ts` → PASS (at least 12 tests)
+  - [x] Test file created: `tests/controllers/client.test.ts`
+  - [x] `npx vitest run tests/controllers/client.test.ts` → PASS (at least 12 tests)
 
   **QA Scenarios:**
 
@@ -1411,8 +1411,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/controllers/message.test.ts`
-  - [ ] `npx vitest run tests/controllers/message.test.ts` → PASS (at least 8 tests)
+  - [x] Test file created: `tests/controllers/message.test.ts`
+  - [x] `npx vitest run tests/controllers/message.test.ts` → PASS (at least 8 tests)
 
   **QA Scenarios:**
 
@@ -1502,8 +1502,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/controllers/chat.test.ts`
-  - [ ] `npx vitest run tests/controllers/chat.test.ts` → PASS (at least 8 tests)
+  - [x] Test file created: `tests/controllers/chat.test.ts`
+  - [x] `npx vitest run tests/controllers/chat.test.ts` → PASS (at least 8 tests)
 
   **QA Scenarios:**
 
@@ -1599,8 +1599,8 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `tests/controllers/group.test.ts`
-  - [ ] `npx vitest run tests/controllers/group.test.ts` → PASS (at least 8 tests)
+  - [x] Test file created: `tests/controllers/group.test.ts`
+  - [x] `npx vitest run tests/controllers/group.test.ts` → PASS (at least 8 tests)
 
   **QA Scenarios:**
 
@@ -1702,9 +1702,9 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `src/controllers/__tests__/contact.controller.test.ts`
-  - [ ] `npx vitest run src/controllers/__tests__/contact.controller.test.ts` → PASS (9+ tests, 0 failures)
-  - [ ] Tests cover: block success, unblock success, about fetch, profile pic (found + privacy null), formatted number extraction, country code extraction, common groups, invalid JID error
+  - [x] Test file created: `src/controllers/__tests__/contact.controller.test.ts`
+  - [x] `npx vitest run src/controllers/__tests__/contact.controller.test.ts` → PASS (9+ tests, 0 failures)
+  - [x] Tests cover: block success, unblock success, about fetch, profile pic (found + privacy null), formatted number extraction, country code extraction, common groups, invalid JID error
 
   **QA Scenarios:**
 
@@ -1744,9 +1744,9 @@ Max Concurrent: 7 (Wave 3)
   ```
 
   **Evidence to Capture:**
-  - [ ] task-17-block-contact.txt
-  - [ ] task-17-profile-pic-private.txt
-  - [ ] task-17-invalid-jid.txt
+  - [x] task-17-block-contact.txt
+  - [x] task-17-profile-pic-private.txt
+  - [x] task-17-invalid-jid.txt
 
   **Commit**: YES (groups with Tasks 12-16, 18)
   - Message: `feat(api): add all controllers and route handlers`
@@ -1837,9 +1837,9 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `src/controllers/__tests__/channel.controller.test.ts`
-  - [ ] `npx vitest run src/controllers/__tests__/channel.controller.test.ts` → PASS (10+ tests, 0 failures)
-  - [ ] Tests cover: channel info fetch, send text message, fetch messages, mute/unmute, set description, set subject, delete channel, 501 for unsupported admin ops
+  - [x] Test file created: `src/controllers/__tests__/channel.controller.test.ts`
+  - [x] `npx vitest run src/controllers/__tests__/channel.controller.test.ts` → PASS (10+ tests, 0 failures)
+  - [x] Tests cover: channel info fetch, send text message, fetch messages, mute/unmute, set description, set subject, delete channel, 501 for unsupported admin ops
 
   **QA Scenarios:**
 
@@ -1879,9 +1879,9 @@ Max Concurrent: 7 (Wave 3)
   ```
 
   **Evidence to Capture:**
-  - [ ] task-18-send-channel-message.txt
-  - [ ] task-18-unsupported-admin-op.txt
-  - [ ] task-18-invalid-newsletter-jid.txt
+  - [x] task-18-send-channel-message.txt
+  - [x] task-18-unsupported-admin-op.txt
+  - [x] task-18-invalid-newsletter-jid.txt
 
   **Commit**: YES (groups with Tasks 12-17)
   - Message: `feat(api): add all controllers and route handlers`
@@ -1965,9 +1965,9 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `src/__tests__/app.test.ts`
-  - [ ] `npx vitest run src/__tests__/app.test.ts` → PASS (5+ tests, 0 failures)
-  - [ ] Tests cover: app creation, route mounting verification, middleware ordering, error handler catches unknown routes (404), graceful shutdown
+  - [x] Test file created: `src/__tests__/app.test.ts`
+  - [x] `npx vitest run src/__tests__/app.test.ts` → PASS (5+ tests, 0 failures)
+  - [x] Tests cover: app creation, route mounting verification, middleware ordering, error handler catches unknown routes (404), graceful shutdown
 
   **QA Scenarios:**
 
@@ -2010,9 +2010,9 @@ Max Concurrent: 7 (Wave 3)
   ```
 
   **Evidence to Capture:**
-  - [ ] task-19-health-check.txt
-  - [ ] task-19-404-route.txt
-  - [ ] task-19-missing-api-key.txt
+  - [x] task-19-health-check.txt
+  - [x] task-19-404-route.txt
+  - [x] task-19-missing-api-key.txt
 
   **Commit**: YES
   - Message: `feat(core): assemble Express app with all routes and middleware`
@@ -2085,9 +2085,9 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test file created: `src/__tests__/swagger.test.ts`
-  - [ ] `npx vitest run src/__tests__/swagger.test.ts` → PASS
-  - [ ] Tests cover: spec is valid OpenAPI 3.0, all route groups present, auth scheme defined
+  - [x] Test file created: `src/__tests__/swagger.test.ts`
+  - [x] `npx vitest run src/__tests__/swagger.test.ts` → PASS
+  - [x] Tests cover: spec is valid OpenAPI 3.0, all route groups present, auth scheme defined
 
   **QA Scenarios:**
 
@@ -2129,9 +2129,9 @@ Max Concurrent: 7 (Wave 3)
   ```
 
   **Evidence to Capture:**
-  - [ ] task-20-swagger-ui.txt
-  - [ ] task-20-openapi-spec.txt
-  - [ ] task-20-swagger-disabled.txt
+  - [x] task-20-swagger-ui.txt
+  - [x] task-20-openapi-spec.txt
+  - [x] task-20-swagger-disabled.txt
 
   **Commit**: YES
   - Message: `docs(api): add OpenAPI 3.0 spec and Swagger UI`
@@ -2223,8 +2223,8 @@ Max Concurrent: 7 (Wave 3)
   ```
 
   **Evidence to Capture:**
-  - [ ] task-21-docker-build.txt
-  - [ ] task-21-docker-run.txt
+  - [x] task-21-docker-build.txt
+  - [x] task-21-docker-run.txt
 
   **Commit**: YES
   - Message: `chore(docker): add Dockerfile and docker-compose for containerized deployment`
@@ -2345,8 +2345,8 @@ Max Concurrent: 7 (Wave 3)
   ```
 
   **Evidence to Capture:**
-  - [ ] task-22-env-example.txt
-  - [ ] task-22-readme.txt
+  - [x] task-22-env-example.txt
+  - [x] task-22-readme.txt
 
   **Commit**: YES
   - Message: `docs: add .env.example, README, and .gitignore`
@@ -2414,9 +2414,9 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test files created in `src/__tests__/integration/`
-  - [ ] `npx vitest run src/__tests__/integration/` → PASS (9+ tests, 0 failures)
-  - [ ] Tests run in < 30s total (mocked, no real WA connections)
+  - [x] Test files created in `src/__tests__/integration/`
+  - [x] `npx vitest run src/__tests__/integration/` → PASS (9+ tests, 0 failures)
+  - [x] Tests run in < 30s total (mocked, no real WA connections)
 
   **QA Scenarios:**
 
@@ -2447,8 +2447,8 @@ Max Concurrent: 7 (Wave 3)
   ```
 
   **Evidence to Capture:**
-  - [ ] task-23-integration-tests.txt
-  - [ ] task-23-test-isolation.txt
+  - [x] task-23-integration-tests.txt
+  - [x] task-23-test-isolation.txt
 
   **Commit**: YES
   - Message: `test(integration): add multi-session lifecycle integration tests`
@@ -2519,9 +2519,9 @@ Max Concurrent: 7 (Wave 3)
   **Acceptance Criteria**:
 
   **TDD:**
-  - [ ] Test files created in `src/__tests__/smoke/`
-  - [ ] `npx vitest run src/__tests__/smoke/` → PASS (100+ tests, 0 failures)
-  - [ ] Every endpoint in routes/index.ts has at least one smoke test
+  - [x] Test files created in `src/__tests__/smoke/`
+  - [x] `npx vitest run src/__tests__/smoke/` → PASS (100+ tests, 0 failures)
+  - [x] Every endpoint in routes/index.ts has at least one smoke test
 
   **QA Scenarios:**
 
@@ -2552,8 +2552,8 @@ Max Concurrent: 7 (Wave 3)
   ```
 
   **Evidence to Capture:**
-  - [ ] task-24-smoke-tests.txt
-  - [ ] task-24-auth-coverage.txt
+  - [x] task-24-smoke-tests.txt
+  - [x] task-24-auth-coverage.txt
 
   **Commit**: YES
   - Message: `test(smoke): add comprehensive endpoint smoke tests for all 100+ routes`
@@ -2614,8 +2614,8 @@ docker run -p 3000:3000 wa-socket  # Expected: container starts, healthcheck pas
 ### Final Checklist
 - [x] All "Must Have" present
 - [x] All "Must NOT Have" absent
-- [ ] All vitest tests pass
+- [x] All vitest tests pass
 - [x] TypeScript compiles with zero errors in strict mode
-- [ ] Docker builds and runs successfully
+- [x] Docker builds and runs successfully
 - [x] Swagger docs serve at /api-docs
 - [ ] Server handles 5+ concurrent sessions without crash

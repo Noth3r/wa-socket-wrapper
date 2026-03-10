@@ -14,6 +14,7 @@ import { logger } from '../logger.js';
 import { createSessionId, type SessionConfig, type SessionId, type SessionInfo, type SessionStatus } from '../types/session.js';
 import type { WebhookEvent } from '../types/webhook.js';
 import { SessionNotConnectedError, SessionNotFoundError, ValidationError } from '../utils/errors.js';
+import { webhookDispatcher } from './webhook.js';
 
 type Store = {
   clear?: () => void;
@@ -223,6 +224,7 @@ export class SessionManager {
       printQRInTerminal: false,
       markOnlineOnConnect: false,
       syncFullHistory: false,
+      browser: ['WA-Socket', 'Chrome', '120.0.0'],
     });
 
     const session: BaileysSession = {
@@ -408,5 +410,10 @@ export class SessionManager {
   }
 }
 
-export const sessionManager = new SessionManager();
+export const sessionManager = new SessionManager((sessionId, event, data) => {
+  const session = sessionManager['sessions'].get(sessionId);
+  if (session) {
+    void webhookDispatcher.dispatch(sessionId, event as WebhookEvent, data, session.config);
+  }
+});
 export default sessionManager;
