@@ -1,16 +1,16 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Request, Response } from 'express';
 import {
-  listSessions,
+  getAllSessions,
   startSession,
   stopSession,
   getSessionStatus,
-  getQRCode,
+  getQRJson,
   requestPairingCode,
   restartSession,
-  terminateSession,
-  terminateInactiveSessions,
-  terminateAllSessions,
+  deleteSession,
+  deleteInactiveSessions,
+  deleteAllSessions,
 } from '../../src/controllers/session.controller.js';
 
 // Mock Request and Response helpers
@@ -38,10 +38,10 @@ describe('Session Controller', () => {
     res = createMockRes();
   });
 
-  describe('listSessions', () => {
+  describe('getAllSessions', () => {
     it('should return empty sessions array initially', () => {
       req = createMockReq();
-      listSessions(req as Request, res as Response);
+      getAllSessions(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe('Session Controller', () => {
 
     it('should return sessions in correct format', () => {
       req = createMockReq();
-      listSessions(req as Request, res as Response);
+      getAllSessions(req as Request, res as Response);
 
       const call = (res.json as any).mock.calls[0][0];
       expect(call).toHaveProperty('success', true);
@@ -136,17 +136,17 @@ describe('Session Controller', () => {
     });
   });
 
-  describe('getQRCode', () => {
+  describe('getQRJson', () => {
     it('should reject invalid session ID', async () => {
       req = createMockReq({}, {});
-      await getQRCode(req as Request, res as Response);
+      await getQRJson(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
 
     it('should return QR code data', async () => {
       req = createMockReq({ sessionId: 'test-1' }, {});
-      await getQRCode(req as Request, res as Response);
+      await getQRJson(req as Request, res as Response);
 
       expect(res.json).toHaveBeenCalled();
     });
@@ -202,37 +202,37 @@ describe('Session Controller', () => {
     });
   });
 
-  describe('terminateSession', () => {
+  describe('deleteSession', () => {
     it('should reject invalid session ID', async () => {
       req = createMockReq({}, {});
-      await terminateSession(req as Request, res as Response);
+      await deleteSession(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
 
     it('should return success on terminate', async () => {
       req = createMockReq({ sessionId: 'test-1' }, {});
-      await terminateSession(req as Request, res as Response);
+      await deleteSession(req as Request, res as Response);
 
       const call = (res.json as any).mock.calls[0][0];
       expect(call).toHaveProperty('success', true);
     });
   });
 
-  describe('terminateInactiveSessions', () => {
+  describe('deleteInactiveSessions', () => {
     it('should return success message', async () => {
       req = createMockReq();
-      await terminateInactiveSessions(req as Request, res as Response);
+      await deleteInactiveSessions(req as Request, res as Response);
 
       const call = (res.json as any).mock.calls[0][0];
       expect(call).toHaveProperty('success', true);
     });
   });
 
-  describe('terminateAllSessions', () => {
+  describe('deleteAllSessions', () => {
     it('should return success message', async () => {
       req = createMockReq();
-      await terminateAllSessions(req as Request, res as Response);
+      await deleteAllSessions(req as Request, res as Response);
 
       const call = (res.json as any).mock.calls[0][0];
       expect(call).toHaveProperty('success', true);
