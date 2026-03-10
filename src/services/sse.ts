@@ -202,4 +202,6 @@ export class SSEManager {
   }
 }
 
-export default SSEManager;
+export const sseManager = new SSEManager();
+
+export default sseManager;

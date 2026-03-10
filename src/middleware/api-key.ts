@@ -14,6 +14,11 @@ import { sendError } from '../utils/response.js';
 export function apiKeyAuth(req: Request, res: Response, next: NextFunction): void {
   const configuredApiKey = process.env.API_KEY;
 
+  // Keep health endpoint public for liveness checks
+  if (req.path === '/api/health/ping' || req.path === '/health/ping') {
+    return next();
+  }
+
   // If API_KEY is not configured, skip authentication
   if (!configuredApiKey) {
     return next();

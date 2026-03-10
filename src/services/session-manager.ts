@@ -160,6 +160,30 @@ export class SessionManager {
     return session.socket;
   }
 
+  getSessionInfo(sessionId: string): SessionInfo | undefined {
+    const session = this.sessions.get(sessionId);
+    if (!session) {
+      return undefined;
+    }
+    return this.toSessionInfo(sessionId, session);
+  }
+
+  isConnected(sessionId: string): boolean {
+    try {
+      const session = this.getSession(sessionId);
+      return session.status === 'connected';
+    } catch {
+      return false;
+    }
+  }
+
+  async requestPairingCode(sessionId: string, phoneNumber: string): Promise<string> {
+    const session = this.getSession(sessionId);
+    // Baileys socket has requestPairingCode method
+    const pairingCode = await (session.socket as any).requestPairingCode(phoneNumber);
+    return pairingCode;
+  }
+
   async restoreSessions(): Promise<void> {
     await fs.mkdir(config.SESSIONS_PATH, { recursive: true });
     const entries = await fs.readdir(config.SESSIONS_PATH, { withFileTypes: true });

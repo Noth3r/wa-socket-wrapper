@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  wa-socket:
+    build: .
+    image: wa-socket:latest
+    container_name: wa-socket
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - ./data/auth:/app/data/auth
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

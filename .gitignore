@@ -1,4 +1,47 @@
+# Dependencies
 node_modules/
+
+# Build output
+dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Data and Sessions
+data/
+sessions/
+auth/
+*.db
+*.sqlite
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+logs/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Development
+.sisyphus/
+Tempwwebjs-api/
+%TEMP%/
+worktrees/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
 dist/
 .env
 data/

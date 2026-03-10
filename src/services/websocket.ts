@@ -229,4 +229,6 @@ export class WebSocketManager {
   }
 }
 
+export const webSocketManager = new WebSocketManager();
+
 export default WebSocketManager;
