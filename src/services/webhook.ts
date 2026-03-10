@@ -43,6 +43,12 @@ export class WebhookDispatcher {
       return;
     }
 
+    // Check if session has a webhookEvents filter and this event is not in it
+    if (sessionConfig?.webhookEvents?.length && !sessionConfig.webhookEvents.includes(event)) {
+      logger.debug({ sessionId, event }, 'Webhook dispatch skipped: event not in session webhookEvents filter');
+      return;
+    }
+
     // Determine webhook URL (prefer session-specific over base)
     const webhookUrl = sessionConfig?.webhookUrl || config.BASE_WEBHOOK_URL;
     

@@ -185,4 +185,42 @@ describe('WebhookDispatcher', () => {
     expect(typeof payload.timestamp).toBe('string');
     expect(new Date(payload.timestamp).toISOString()).toBe(payload.timestamp);
   });
+
+  it('skips dispatch when event not in session webhookEvents filter', async () => {
+    const sessionConfig: SessionConfig = {
+      webhookUrl: 'https://custom.example.com/webhook',
+      webhookEvents: ['messages.upsert'],
+    };
+
+    await dispatcher.dispatch('test-session', 'chats.update', { chats: [] }, sessionConfig);
+
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    expect(mockAxiosPost).not.toHaveBeenCalled();
+  });
+
+  it('dispatches when event is in session webhookEvents filter', async () => {
+    const sessionConfig: SessionConfig = {
+      webhookUrl: 'https://custom.example.com/webhook',
+      webhookEvents: ['messages.upsert', 'qr'],
+    };
+
+    await dispatcher.dispatch('test-session', 'messages.upsert', { messages: [] }, sessionConfig);
+
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    expect(mockAxiosPost).toHaveBeenCalledTimes(1);
+  });
+
+  it('dispatches all events when webhookEvents is not configured', async () => {
+    const sessionConfig: SessionConfig = {
+      webhookUrl: 'https://custom.example.com/webhook',
+    };
+
+    await dispatcher.dispatch('test-session', 'chats.update', { chats: [] }, sessionConfig);
+
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    expect(mockAxiosPost).toHaveBeenCalledTimes(1);
+  }); 
 });
