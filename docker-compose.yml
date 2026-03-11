@@ -9,7 +9,7 @@ services:
     ports:
       - "${PORT:-3000}:3000"
     volumes:
-      - ./data/auth:/app/data/auth
+      - ./sessions:/app/sessions
     env_file:
       - .env
     environment:
