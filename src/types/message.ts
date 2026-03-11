@@ -23,6 +23,7 @@ export type ContentType =
 export interface SendMessageOptions {
   quotedMessageId?: string; // Message ID to quote/reply to
   mentions?: string[]; // JIDs of users to mention (@user)
+  mentionAll?: boolean; // When true, @all mention -- overrides individual mentions
   caption?: string; // Caption for media messages
   fileName?: string; // Custom filename for document messages
   mimetype?: string; // MIME type for document/media messages

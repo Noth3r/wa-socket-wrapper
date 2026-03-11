@@ -65,7 +65,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
   const jid = normalizeJid(chatId);
 
   const sendOptions: Record<string, unknown> = {};
-  if (Array.isArray(options.mentions) && options.mentions.length > 0) {
+  if (Array.isArray(options.mentions) && options.mentions.length > 0 && !options.mentionAll) {
     sendOptions.mentions = options.mentions.map((mention: string) => normalizeJid(mention));
   }
 
@@ -135,6 +135,14 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     }
     default:
       throw new ValidationError(`Unsupported content type: ${contentType}`);
+  }
+
+  if (options.mentionAll === true) {
+    messageContent.contextInfo = {
+      mentionedJid: [],
+      groupMentions: [],
+      nonJidMentions: 1,
+    };
   }
 
   const message = await sock.sendMessage(jid, messageContent, sendOptions);
