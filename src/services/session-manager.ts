@@ -6,6 +6,7 @@ import makeWASocket, {
   makeCacheableSignalKeyStore,
   type AuthenticationState,
   type ConnectionState,
+  type WAMessage,
   type WASocket,
   useMultiFileAuthState,
 } from '@whiskeysockets/baileys';
@@ -15,6 +16,7 @@ import { createSessionId, type SessionConfig, type SessionId, type SessionInfo, 
 import type { WebhookEvent } from '../types/webhook.js';
 import { SessionNotConnectedError, SessionNotFoundError, ValidationError } from '../utils/errors.js';
 import { webhookDispatcher } from './webhook.js';
+import { normalizeMessagesUpsert } from './message-normalizer.js';
 
 type Store = {
   clear?: () => void;
@@ -413,7 +415,11 @@ export class SessionManager {
 export const sessionManager = new SessionManager((sessionId, event, data) => {
   const session = sessionManager['sessions'].get(sessionId);
   if (session) {
-    void webhookDispatcher.dispatch(sessionId, event as WebhookEvent, data, session.config);
+    let dispatchData = data;
+    if (event === 'messages.upsert') {
+      dispatchData = normalizeMessagesUpsert(data as { messages: WAMessage[], type: string });
+    }
+    void webhookDispatcher.dispatch(sessionId, event as WebhookEvent, dispatchData, session.config);
   }
 });
 export default sessionManager;
