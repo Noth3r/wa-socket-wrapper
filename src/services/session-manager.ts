@@ -380,10 +380,16 @@ export class SessionManager {
   }
 
   private toSessionInfo(sessionId: string, session: BaileysSession): SessionInfo {
+    const user = session.socket?.user;
     return {
       id: createSessionId(sessionId) as SessionId,
       status: session.status,
       qr: session.qr,
+      me: user ? {
+        id: user.id,
+        name: user.name,
+        number: user.id.split('@')[0],
+      } : undefined,
     };
   }
 

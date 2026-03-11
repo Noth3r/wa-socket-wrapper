@@ -48,9 +48,9 @@ export async function terminateAllSessions(): Promise<void> {
 
   for (const session of sessions) {
     try {
-      await sessionManager.terminateSession(session.id as unknown as string);
+      await sessionManager.stopSession(session.id as unknown as string);
     } catch (error) {
-      logger.error({ sessionId: session.id, error }, 'Failed terminating session during shutdown');
+      logger.error({ sessionId: session.id, error }, 'Failed stopping session during shutdown');
     }
   }
 }
