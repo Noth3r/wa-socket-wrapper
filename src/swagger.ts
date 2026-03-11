@@ -1,8 +1,6 @@
 /**
  * OpenAPI 3.0 Specification for WA-Socket REST API
- * Comprehensive documentation for all 114 endpoints across 8 route groups
- * 
- * This file is auto-generated. Do not edit manually.
+ * Assembled from Wave 1 draft route specs.
  */
 
 export const swaggerSpec = {
@@ -135,15 +133,10 @@ export const swaggerSpec = {
         "type": "object",
         "properties": {
           "success": {
-            "type": "boolean",
-            "description": "Whether the request was successful"
+            "type": "boolean"
           },
           "data": {
-            "description": "Response data (type varies by endpoint)"
-          },
-          "error": {
-            "type": "string",
-            "description": "Error message (present when success is false)"
+            "description": "Response payload"
           }
         },
         "required": [
@@ -167,128 +160,6 @@ export const swaggerSpec = {
           "error"
         ]
       },
-      "SessionStatus": {
-        "type": "string",
-        "enum": [
-          "starting",
-          "qr_ready",
-          "connected",
-          "disconnected",
-          "terminated"
-        ],
-        "description": "Current status of the WhatsApp session"
-      },
-      "ContactInfo": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "1234567890@s.whatsapp.net"
-          },
-          "name": {
-            "type": "string",
-            "example": "John Doe"
-          },
-          "number": {
-            "type": "string",
-            "example": "1234567890"
-          },
-          "shortName": {
-            "type": "string",
-            "example": "John"
-          },
-          "isBusiness": {
-            "type": "boolean",
-            "example": false
-          },
-          "isEnterprise": {
-            "type": "boolean",
-            "example": false
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "SessionInfo": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "my-session-123"
-          },
-          "status": {
-            "$ref": "#/components/schemas/SessionStatus"
-          },
-          "qr": {
-            "type": "string",
-            "description": "QR code data URL (present when status is qr_ready)"
-          },
-          "me": {
-            "$ref": "#/components/schemas/ContactInfo",
-            "description": "Current user info (when connected)"
-          }
-        },
-        "required": [
-          "id",
-          "status"
-        ]
-      },
-      "PaginatedResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ApiResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "pagination": {
-                "type": "object",
-                "properties": {
-                  "offset": {
-                    "type": "number",
-                    "description": "Offset in the result set"
-                  },
-                  "limit": {
-                    "type": "number",
-                    "description": "Number of items per page"
-                  },
-                  "total": {
-                    "type": "number",
-                    "description": "Total items available"
-                  }
-                },
-                "required": [
-                  "offset",
-                  "limit",
-                  "total"
-                ]
-              }
-            },
-            "required": [
-              "pagination"
-            ]
-          }
-        ]
-      },
-      "SessionConfig": {
-        "type": "object",
-        "properties": {
-          "webhookUrl": {
-            "type": "string",
-            "format": "uri"
-          },
-          "webhookEvents": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "autoRestart": {
-            "type": "boolean"
-          }
-        }
-      },
       "ContentType": {
         "type": "string",
         "enum": [
@@ -297,15 +168,42 @@ export const swaggerSpec = {
           "video",
           "audio",
           "document",
+          "sticker",
           "location",
           "contact",
-          "poll",
-          "sticker"
+          "poll"
         ],
         "description": "Type of message content"
       },
+      "MessageKey": {
+        "type": "object",
+        "required": [
+          "remoteJid",
+          "id",
+          "fromMe"
+        ],
+        "properties": {
+          "remoteJid": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "fromMe": {
+            "type": "boolean"
+          },
+          "participant": {
+            "type": "string"
+          }
+        }
+      },
       "SendMessageRequest": {
         "type": "object",
+        "required": [
+          "chatId",
+          "contentType",
+          "content"
+        ],
         "properties": {
           "chatId": {
             "type": "string",
@@ -332,144 +230,41 @@ export const swaggerSpec = {
               "mentionAll": {
                 "type": "boolean",
                 "description": "When true, mentions all participants in a group chat (@all). Overrides individual mentions."
+              },
+              "caption": {
+                "type": "string"
+              },
+              "fileName": {
+                "type": "string"
+              },
+              "mimetype": {
+                "type": "string"
               }
             }
           }
-        },
-        "required": [
-          "chatId",
-          "contentType",
-          "content"
-        ]
+        }
       },
-      "MessageInfo": {
+      "JidRequest": {
         "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "chatId": {
-            "type": "string"
-          },
-          "fromId": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "number"
-          },
-          "type": {
-            "$ref": "#/components/schemas/ContentType"
-          },
-          "body": {
-            "type": "string"
-          },
-          "isFromMe": {
-            "type": "boolean"
-          }
-        },
         "required": [
-          "id",
-          "chatId"
-        ]
-      },
-      "ChatInfo": {
-        "type": "object",
+          "jid"
+        ],
         "properties": {
-          "id": {
+          "jid": {
             "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "isGroup": {
-            "type": "boolean"
-          },
-          "timestamp": {
-            "type": "number"
-          },
-          "unreadCount": {
-            "type": "number"
-          },
-          "archived": {
-            "type": "boolean"
-          },
-          "pinned": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "ChatUpdate": {
-        "type": "object",
-        "properties": {
-          "archive": {
-            "type": "boolean"
-          },
-          "pin": {
-            "type": "boolean"
-          },
-          "mute": {
-            "type": "boolean"
-          },
-          "muteDuration": {
-            "type": "number"
           }
         }
       },
-      "GroupInfo": {
+      "CodeRequest": {
         "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "subject": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "owner": {
-            "type": "string"
-          },
-          "creation": {
-            "type": "number"
-          },
-          "participants": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GroupParticipant"
-            }
-          },
-          "announce": {
-            "type": "boolean"
-          },
-          "locked": {
-            "type": "boolean"
-          }
-        },
         "required": [
-          "id",
-          "subject"
-        ]
-      },
-      "GroupParticipant": {
-        "type": "object",
+          "code"
+        ],
         "properties": {
-          "id": {
+          "code": {
             "type": "string"
-          },
-          "isAdmin": {
-            "type": "boolean"
-          },
-          "isSuperAdmin": {
-            "type": "boolean"
           }
-        },
-        "required": [
-          "id"
-        ]
+        }
       }
     },
     "responses": {
@@ -485,6 +280,16 @@ export const swaggerSpec = {
       },
       "BadRequest": {
         "description": "Bad request - invalid parameters",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error - invalid request payload",
         "content": {
           "application/json": {
             "schema": {
@@ -528,11 +333,11 @@ export const swaggerSpec = {
   "paths": {
     "/health/ping": {
       "get": {
+        "summary": "Health check endpoint",
+        "description": "System ping endpoint to verify API is running",
         "tags": [
           "Health"
         ],
-        "summary": "Health check",
-        "description": "Check if the API is running",
         "security": [],
         "responses": {
           "200": {
@@ -552,10 +357,6 @@ export const swaggerSpec = {
                         "message": {
                           "type": "string",
                           "example": "pong"
-                        },
-                        "timestamp": {
-                          "type": "number",
-                          "example": 1700000000
                         }
                       }
                     }
@@ -563,100 +364,69 @@ export const swaggerSpec = {
                 }
               }
             }
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
           }
-        },
-        "operationId": "getHealthPing"
+        }
       }
     },
     "/sessions": {
       "get": {
+        "summary": "Get all sessions",
+        "description": "Retrieve list of all active sessions",
         "tags": [
           "Sessions"
         ],
-        "summary": "List all sessions",
-        "description": "Get a list of all WhatsApp sessions",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+            "description": "List of sessions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "operationId": "getSessions"
+        }
       },
       "delete": {
-        "tags": [
-          "Sessions"
-        ],
         "summary": "Delete all sessions",
-        "description": "Stop and delete all WhatsApp sessions",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessions"
-      }
-    },
-    "/sessions/inactive": {
-      "delete": {
+        "description": "Terminate and delete all active sessions",
         "tags": [
           "Sessions"
         ],
-        "summary": "Delete inactive sessions",
-        "description": "Delete sessions that are not connected",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessionsInactive"
-      }
-    },
-    "/sessions/{sessionId}/start": {
-      "post": {
-        "tags": [
-          "Sessions"
-        ],
-        "summary": "Start a session",
-        "description": "Initialize and start a WhatsApp session",
-        "parameters": [
+        "security": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "apiKey": []
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "webhookUrl": {
-                    "type": "string",
-                    "format": "uri"
-                  },
-                  "webhookEvents": {
-                    "type": "array",
-                    "items": {
+        "responses": {
+          "200": {
+            "description": "All sessions terminated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "terminatedCount": {
+                      "type": "integer"
+                    },
+                    "message": {
                       "type": "string"
                     }
                   }
@@ -664,126 +434,263 @@ export const swaggerSpec = {
               }
             }
           }
-        },
+        }
+      }
+    },
+    "/sessions/inactive": {
+      "delete": {
+        "summary": "Delete all inactive sessions",
+        "description": "Terminate and delete all sessions that are not currently connected",
+        "tags": [
+          "Sessions"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+            "description": "Inactive sessions terminated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "terminatedCount": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/start": {
+      "post": {
+        "summary": "Start a new session",
+        "description": "Initialize a new WhatsApp session and begin QR code authentication",
+        "tags": [
+          "Sessions"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "webhookUrl": {
+                    "type": "string",
+                    "description": "Optional webhook URL for event delivery"
+                  },
+                  "webhookEvents": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Optional list of events to send to webhook"
+                  }
+                }
+              }
+            }
           }
         },
-        "operationId": "postSessionsSessionIdStart"
+        "responses": {
+          "201": {
+            "description": "Session started successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/sessions/{sessionId}/stop": {
       "post": {
+        "summary": "Stop a session",
+        "description": "Pause a running WhatsApp session without terminating it",
         "tags": [
           "Sessions"
         ],
-        "summary": "Stop a session",
-        "description": "Stop a running WhatsApp session",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+            "description": "Session stopped successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Session stopped"
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "operationId": "postSessionsSessionIdStop"
+        }
       }
     },
     "/sessions/{sessionId}/status": {
       "get": {
+        "summary": "Get session status",
+        "description": "Retrieve the current status and information for a specific session",
         "tags": [
           "Sessions"
         ],
-        "summary": "Get session status",
-        "description": "Retrieve the current status of a session",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+            "description": "Session information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "operationId": "getSessionsSessionIdStatus"
+        }
       }
     },
     "/sessions/{sessionId}/qr": {
       "get": {
+        "summary": "Get QR code as JSON",
+        "description": "Retrieve the QR code for authentication as a JSON string",
         "tags": [
           "Sessions"
         ],
-        "summary": "Get QR code",
-        "description": "Get the current QR code for authentication",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+            "description": "QR code string",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "qr": {
+                      "type": "string",
+                      "description": "QR code as a string"
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "operationId": "getSessionsSessionIdQr"
+        }
       }
     },
     "/sessions/{sessionId}/qr/image": {
       "get": {
+        "summary": "Get QR code as PNG image",
+        "description": "Retrieve the QR code for authentication as a PNG image file",
         "tags": [
           "Sessions"
         ],
-        "summary": "Get QR code image",
-        "description": "Get QR code as PNG image",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "QR code image",
+            "description": "QR code as PNG image",
             "content": {
               "image/png": {
                 "schema": {
@@ -792,57 +699,74 @@ export const swaggerSpec = {
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
           }
-        },
-        "operationId": "getSessionsSessionIdQrImage"
+        }
       }
     },
     "/sessions/{sessionId}/qr/stream": {
       "get": {
+        "summary": "Stream QR code updates via SSE",
+        "description": "Establish Server-Sent Events stream to receive real-time QR code and connection status updates",
         "tags": [
           "Sessions"
         ],
-        "summary": "Stream QR codes via SSE",
-        "description": "Server-sent events stream of QR codes and connection updates",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "SSE stream",
+            "description": "SSE stream of events",
             "content": {
               "text/event-stream": {
                 "schema": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "event": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
           }
-        },
-        "operationId": "getSessionsSessionIdQrStream"
+        }
       }
     },
     "/sessions/{sessionId}/pairing-code": {
       "post": {
+        "summary": "Request pairing code for phone number",
+        "description": "Generate a pairing code for device registration instead of using QR code",
         "tags": [
           "Sessions"
         ],
-        "summary": "Request pairing code",
-        "description": "Request a pairing code for phone number authentication",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -851,514 +775,13 @@ export const swaggerSpec = {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "phoneNumber"
+                ],
                 "properties": {
                   "phoneNumber": {
                     "type": "string",
-                    "example": "1234567890"
-                  }
-                },
-                "required": [
-                  "phoneNumber"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdPairingCode"
-      }
-    },
-    "/sessions/{sessionId}/restart": {
-      "post": {
-        "tags": [
-          "Sessions"
-        ],
-        "summary": "Restart session",
-        "description": "Stop and start a session",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdRestart"
-      }
-    },
-    "/sessions/{sessionId}": {
-      "delete": {
-        "tags": [
-          "Sessions"
-        ],
-        "summary": "Delete session",
-        "description": "Stop and permanently delete a session",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessionsSessionId"
-      }
-    },
-    "/sessions/{sessionId}/client/info": {
-      "get": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Get client info",
-        "description": "Get information about the connected WhatsApp account",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdClientInfo"
-      }
-    },
-    "/sessions/{sessionId}/client/contacts": {
-      "get": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Get all contacts",
-        "description": "Retrieve all contacts from the WhatsApp account",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdClientContacts"
-      }
-    },
-    "/sessions/{sessionId}/client/chats": {
-      "get": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Get all chats",
-        "description": "Retrieve all chats from the WhatsApp account",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdClientChats"
-      }
-    },
-    "/sessions/{sessionId}/client/profile-picture": {
-      "get": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Get profile picture",
-        "description": "Get profile picture URL for a JID",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "name": "jid",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "WhatsApp JID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdClientProfilePicture"
-      }
-    },
-    "/sessions/{sessionId}/client/profile-status": {
-      "get": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Get profile status",
-        "description": "Get status/about text for a JID",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "name": "jid",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdClientProfileStatus"
-      },
-      "put": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Update profile status",
-        "description": "Update own status/about text",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "status": {
-                    "type": "string",
-                    "example": "Hello, World!"
-                  }
-                },
-                "required": [
-                  "status"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "putSessionsSessionIdClientProfileStatus"
-      }
-    },
-    "/sessions/{sessionId}/client/profile-name": {
-      "put": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Update profile name",
-        "description": "Update own display name",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "John Doe"
-                  }
-                },
-                "required": [
-                  "name"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "putSessionsSessionIdClientProfileName"
-      }
-    },
-    "/sessions/{sessionId}/client/profile-picture-own": {
-      "put": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Update profile picture",
-        "description": "Update own profile picture",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "image": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                },
-                "required": [
-                  "image"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "putSessionsSessionIdClientProfilePictureOwn"
-      },
-      "delete": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Remove profile picture",
-        "description": "Remove own profile picture",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessionsSessionIdClientProfilePictureOwn"
-      }
-    },
-    "/sessions/{sessionId}/client/privacy": {
-      "get": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Get privacy settings",
-        "description": "Get current privacy settings",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdClientPrivacy"
-      },
-      "put": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Update privacy settings",
-        "description": "Update privacy settings for last seen, profile photo, status, etc.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "readreceipts": {
-                    "type": "string",
-                    "enum": [
-                      "all",
-                      "contacts",
-                      "none"
-                    ]
-                  },
-                  "profile": {
-                    "type": "string",
-                    "enum": [
-                      "all",
-                      "contacts",
-                      "none"
-                    ]
-                  },
-                  "status": {
-                    "type": "string",
-                    "enum": [
-                      "all",
-                      "contacts",
-                      "none"
-                    ]
-                  },
-                  "online": {
-                    "type": "string",
-                    "enum": [
-                      "all",
-                      "match_last_seen"
-                    ]
-                  },
-                  "last": {
-                    "type": "string",
-                    "enum": [
-                      "all",
-                      "contacts",
-                      "none"
-                    ]
-                  },
-                  "groupadd": {
-                    "type": "string",
-                    "enum": [
-                      "all",
-                      "contacts",
-                      "none"
-                    ]
+                    "description": "Phone number to request pairing code for"
                   }
                 }
               }
@@ -1367,157 +790,39 @@ export const swaggerSpec = {
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "putSessionsSessionIdClientPrivacy"
-      }
-    },
-    "/sessions/{sessionId}/client/block": {
-      "post": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Block user",
-        "description": "Block a user by JID",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "jid": {
-                    "type": "string",
-                    "example": "1234567890@s.whatsapp.net"
+            "description": "Pairing code generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pairingCode": {
+                      "type": "string"
+                    }
                   }
-                },
-                "required": [
-                  "jid"
-                ]
+                }
               }
             }
           }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdClientBlock"
+        }
       }
     },
-    "/sessions/{sessionId}/client/unblock": {
+    "/sessions/{sessionId}/restart": {
       "post": {
+        "summary": "Restart a session",
+        "description": "Restart an existing WhatsApp session",
         "tags": [
-          "Client"
+          "Sessions"
         ],
-        "summary": "Unblock user",
-        "description": "Unblock a user by JID",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "jid": {
-                    "type": "string",
-                    "example": "1234567890@s.whatsapp.net"
-                  }
-                },
-                "required": [
-                  "jid"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdClientUnblock"
-      }
-    },
-    "/sessions/{sessionId}/client/blocklist": {
-      "get": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Get blocked users",
-        "description": "Get list of blocked users",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdClientBlocklist"
-      }
-    },
-    "/sessions/{sessionId}/client/business-profile": {
-      "get": {
-        "tags": [
-          "Client"
-        ],
-        "summary": "Get business profile",
-        "description": "Get business profile information for a JID",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "name": "jid",
-            "in": "query",
+            "name": "sessionId",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
@@ -1526,31 +831,84 @@ export const swaggerSpec = {
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+            "description": "Session restarted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "operationId": "getSessionsSessionIdClientBusinessProfile"
+        }
       }
     },
-    "/sessions/{sessionId}/messages/send": {
-      "post": {
+    "/sessions/{sessionId}": {
+      "delete": {
+        "summary": "Delete/terminate a specific session",
+        "description": "Permanently terminate and delete a specific WhatsApp session",
         "tags": [
-          "Messages"
+          "Sessions"
         ],
-        "summary": "Send message",
-        "description": "Send a message to a chat",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session terminated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Session terminated"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/send-message": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Send a message",
+        "description": "Send a message to a chat with various content types (text, image, video, audio, document, sticker, location, contact, poll)",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           }
         ],
         "requestBody": {
@@ -1559,10 +917,15 @@ export const swaggerSpec = {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "chatId",
+                  "contentType",
+                  "content"
+                ],
                 "properties": {
                   "chatId": {
                     "type": "string",
-                    "example": "1234567890@s.whatsapp.net"
+                    "description": "JID of the chat (user or group)"
                   },
                   "contentType": {
                     "type": "string",
@@ -1572,70 +935,3731 @@ export const swaggerSpec = {
                       "video",
                       "audio",
                       "document",
+                      "sticker",
                       "location",
                       "contact",
-                      "poll",
-                      "sticker"
-                    ]
+                      "poll"
+                    ],
+                    "description": "Type of content being sent"
                   },
                   "content": {
-                    "type": "object"
+                    "description": "Content payload (format depends on contentType)"
                   },
                   "options": {
                     "type": "object",
                     "properties": {
                       "quotedMessageId": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Message ID to quote/reply to"
                       },
                       "mentions": {
                         "type": "array",
                         "items": {
                           "type": "string"
-                        }
+                        },
+                        "description": "JIDs of users to mention (@user)"
+                      },
+                      "mentionAll": {
+                        "type": "boolean",
+                        "description": "When true, @all mention -- overrides individual mentions"
+                      },
+                      "caption": {
+                        "type": "string",
+                        "description": "Caption for media messages"
+                      },
+                      "fileName": {
+                        "type": "string",
+                        "description": "Custom filename for document messages"
+                      },
+                      "mimetype": {
+                        "type": "string",
+                        "description": "MIME type for document/media messages"
                       }
                     }
                   }
-                },
-                "required": [
-                  "chatId",
-                  "contentType",
-                  "content"
-                ]
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Message sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
+            "description": "Validation error"
           },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+          "404": {
+            "description": "Session not found"
           }
-        },
-        "operationId": "postSessionsSessionIdMessagesSend"
+        }
       }
     },
-    "/sessions/{sessionId}/messages/send-bulk": {
-      "post": {
+    "/sessions/{sessionId}/client/contacts": {
+      "get": {
         "tags": [
-          "Messages"
+          "Client"
         ],
-        "summary": "Send bulk messages",
-        "description": "Send multiple messages",
+        "summary": "Get all contacts",
+        "description": "Retrieve all contacts from the session store",
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contacts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/chats": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get all chats",
+        "description": "Retrieve all chats from the session store",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chats retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Search chats",
+        "description": "Search and filter chats by query, unread status, group status, or timestamp",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "searchOptions": {
+                    "type": "object",
+                    "properties": {
+                      "unread": {
+                        "type": "boolean",
+                        "description": "Filter by unread status"
+                      },
+                      "since": {
+                        "type": "number",
+                        "description": "Filter by timestamp (Unix timestamp)"
+                      },
+                      "isGroup": {
+                        "type": "boolean",
+                        "description": "Filter by group status"
+                      },
+                      "query": {
+                        "type": "string",
+                        "description": "Search query for chat name or ID"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chats filtered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/chat/{chatId}": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get chat by ID",
+        "description": "Retrieve a specific chat by its ID",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (URL-encoded)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/contact/{contactId}": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get contact by ID",
+        "description": "Retrieve a specific contact by its ID",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "contactId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Contact ID (URL-encoded)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/is-registered": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Check if number is registered",
+        "description": "Check if a WhatsApp number is registered on WhatsApp",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           }
         ],
         "requestBody": {
           "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "number"
+                ],
+                "properties": {
+                  "number": {
+                    "type": "string",
+                    "description": "Phone number to check"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registration status retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/number-id": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get number JID",
+        "description": "Convert a phone number to WhatsApp JID format",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "number"
+                ],
+                "properties": {
+                  "number": {
+                    "type": "string",
+                    "description": "Phone number to convert"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JID retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "jid": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/profile-picture-url": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get profile picture URL",
+        "description": "Retrieve the profile picture URL for a contact",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "contactId"
+                ],
+                "properties": {
+                  "contactId": {
+                    "type": "string",
+                    "description": "Contact ID (JID)"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Picture type",
+                    "default": "image"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile picture URL retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/set-status": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Set status message",
+        "description": "Update the WhatsApp status/bio message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "Status message text"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/set-display-name": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Set display name",
+        "description": "Update the WhatsApp display name",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Display name"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Display name updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/set-profile-picture": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Set profile picture",
+        "description": "Update the WhatsApp profile picture",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "content"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Target JID (optional, defaults to self)"
+                  },
+                  "content": {
+                    "description": "Image content"
+                  },
+                  "options": {
+                    "type": "object",
+                    "description": "Media options"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile picture updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/profile-picture": {
+      "delete": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Delete profile picture",
+        "description": "Remove the WhatsApp profile picture",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile picture removed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/create-group": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Create a group",
+        "description": "Create a new WhatsApp group with specified participants",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "participants"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Group name"
+                  },
+                  "participants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of participant JIDs"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Group created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/presence/available": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Set presence to available",
+        "description": "Update WhatsApp presence status to available (online)",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Presence updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/presence/unavailable": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Set presence to unavailable",
+        "description": "Update WhatsApp presence status to unavailable (offline)",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Presence updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/search-messages": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Search messages",
+        "description": "Search messages in all chats or a specific chat by text query",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Search query text"
+                  },
+                  "chatId": {
+                    "type": "string",
+                    "description": "Limit search to specific chat ID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Messages retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/blocked-contacts": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get blocked contacts",
+        "description": "Retrieve list of blocked contacts",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blocked contacts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/labels": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get all labels",
+        "description": "Retrieve all chat labels",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labels retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/labels/{labelId}": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get label by ID",
+        "description": "Retrieve a specific label by its ID",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "labelId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Label ID (URL-encoded)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Label retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/labels/chat/{chatId}": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get labels for chat",
+        "description": "Retrieve all labels associated with a specific chat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (URL-encoded)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labels retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/labels/{labelId}/chats": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get chats by label ID",
+        "description": "Retrieve all chats that have a specific label",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "labelId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Label ID (URL-encoded)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chats retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/client/labels/modify": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Modify labels for chat",
+        "description": "Add or remove labels from a chat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "chatId",
+                  "labelIds",
+                  "action"
+                ],
+                "properties": {
+                  "chatId": {
+                    "type": "string",
+                    "description": "Chat ID"
+                  },
+                  "labelIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of label IDs"
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "add",
+                      "remove"
+                    ],
+                    "description": "Action to perform (add or remove)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Labels modified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chatId": {
+                          "type": "string"
+                        },
+                        "labels": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/delete": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Delete a message",
+        "description": "Delete a message from a chat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID (e.g., 6281234567890@s.whatsapp.net)"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/edit": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Edit a message",
+        "description": "Edit the text content of a previously sent message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey",
+                  "text"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Must be true for editing"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "New text content"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message edited successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/react": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "React to a message",
+        "description": "Add or remove an emoji reaction to a message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey",
+                  "emoji"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  },
+                  "emoji": {
+                    "type": "string",
+                    "description": "Emoji to react with (empty string to remove reaction)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reaction sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/forward": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Forward a message",
+        "description": "Forward an existing message to another chat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey",
+                  "targetJid"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Original chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  },
+                  "targetJid": {
+                    "type": "string",
+                    "description": "Destination chat JID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message forwarded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/star": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Star a message",
+        "description": "Mark a message as starred/favorite",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message starred successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/unstar": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Unstar a message",
+        "description": "Remove star/favorite from a message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message unstarred successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/reply": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Reply to a message",
+        "description": "Send a message as a reply to an existing message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey",
+                  "content"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID to reply to"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the original message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  },
+                  "content": {
+                    "type": "object",
+                    "description": "Message content (e.g., {text: 'Reply text'})"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reply sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/download-media": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Download media from a message",
+        "description": "Download media (image, video, audio, document, sticker) from a message and return as base64",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "image",
+                      "video",
+                      "audio",
+                      "document",
+                      "sticker"
+                    ],
+                    "description": "Media type (auto-detected if not provided)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Media downloaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "mimetype": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "data": {
+                          "type": "string",
+                          "description": "Base64-encoded media data"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/download-media/stream": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Download media from a message (streaming)",
+        "description": "Download media (image, video, audio, document, sticker) from a message and return as binary stream",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "image",
+                      "video",
+                      "audio",
+                      "document",
+                      "sticker"
+                    ],
+                    "description": "Media type (auto-detected if not provided)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Media downloaded successfully",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/info": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Get message info",
+        "description": "Get metadata and status information about a message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message info retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "object"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "messageTimestamp": {
+                          "type": "number"
+                        },
+                        "pushName": {
+                          "type": "string"
+                        },
+                        "participant": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/mentions": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Get message mentions",
+        "description": "Get a list of mentioned JIDs from a message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mentions retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/quoted": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Get quoted message",
+        "description": "Get the quoted/replied-to message from a message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quoted message retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/reactions": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Get message reactions",
+        "description": "Get all reactions to a message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reactions retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/poll-votes": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Get poll votes",
+        "description": "Get all votes for a poll message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Poll message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the poll was created by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group polls)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Poll votes retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/messages/contact": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Get message contact",
+        "description": "Get contact information for the sender of a message",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageKey"
+                ],
+                "properties": {
+                  "messageKey": {
+                    "type": "object",
+                    "required": [
+                      "remoteJid",
+                      "id",
+                      "fromMe"
+                    ],
+                    "properties": {
+                      "remoteJid": {
+                        "type": "string",
+                        "description": "Chat JID"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "fromMe": {
+                        "type": "boolean",
+                        "description": "Whether the message was sent by the current user"
+                      },
+                      "participant": {
+                        "type": "string",
+                        "description": "Participant JID (for group messages)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact info retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/typing": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Send typing indicator",
+        "description": "Sends a typing (composing) presence indicator to the specified chat",
+        "operationId": "sendTypingIndicator",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Typing indicator sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Typing indicator sent"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/recording": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Send recording indicator",
+        "description": "Sends a recording presence indicator to the specified chat",
+        "operationId": "sendRecordingIndicator",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recording indicator sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Recording indicator sent"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/clear-state": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Clear presence state",
+        "description": "Clears typing/recording presence state (sends paused status)",
+        "operationId": "clearPresenceState",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Presence state cleared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Presence state cleared"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/seen": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Mark messages as read",
+        "description": "Marks specified messages as read (seen)",
+        "operationId": "markMessagesAsRead",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messageIds"
+                ],
+                "properties": {
+                  "messageIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of message IDs to mark as read",
+                    "example": [
+                      "msg_id_1",
+                      "msg_id_2"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Messages marked as read successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Messages marked as read"
+                        },
+                        "count": {
+                          "type": "number",
+                          "example": 2
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/mark-unread": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Mark chat as unread",
+        "description": "Marks the entire chat as unread",
+        "operationId": "markChatAsUnread",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat marked as unread successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Chat marked as unread"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/archive": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Archive chat",
+        "description": "Archives the specified chat",
+        "operationId": "archiveChat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat archived successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Chat archived"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/unarchive": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Unarchive chat",
+        "description": "Unarchives the specified chat",
+        "operationId": "unarchiveChat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat unarchived successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Chat unarchived"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/pin": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Pin chat",
+        "description": "Pins the specified chat to the top of the chat list",
+        "operationId": "pinChat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat pinned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Chat pinned"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/unpin": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Unpin chat",
+        "description": "Unpins the specified chat from the top of the chat list",
+        "operationId": "unpinChat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat unpinned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Chat unpinned"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/mute": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Mute chat",
+        "description": "Mutes notifications for the specified chat for a given duration",
+        "operationId": "muteChat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "duration"
+                ],
+                "properties": {
+                  "duration": {
+                    "type": "number",
+                    "description": "Mute duration in milliseconds",
+                    "example": 28800000,
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat muted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Chat muted"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        },
+                        "duration": {
+                          "type": "number",
+                          "example": 28800000
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/unmute": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Unmute chat",
+        "description": "Unmutes notifications for the specified chat",
+        "operationId": "unmuteChat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat unmuted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Chat unmuted"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/messages": {
+      "get": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Fetch chat messages",
+        "description": "Retrieves messages from the specified chat with pagination support",
+        "operationId": "fetchMessages",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50
+            },
+            "description": "Maximum number of messages to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
+            "description": "Number of messages to skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        },
+                        "messages": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        },
+                        "total": {
+                          "type": "number",
+                          "example": 150
+                        },
+                        "limit": {
+                          "type": "number",
+                          "example": 50
+                        },
+                        "offset": {
+                          "type": "number",
+                          "example": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/contact": {
+      "get": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Get chat contact",
+        "description": "Retrieves contact information for the specified chat",
+        "operationId": "getChatContact",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}": {
+      "delete": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Delete chat",
+        "description": "Deletes the specified chat",
+        "operationId": "deleteChat",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Chat deleted"
+                        },
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/sessions/{sessionId}/chats/{chatId}/clear": {
+      "post": {
+        "tags": [
+          "Chats"
+        ],
+        "summary": "Clear chat messages",
+        "description": "Clears messages from the specified chat. If messageIds array is provided, only those messages are cleared; otherwise all messages are cleared.",
+        "operationId": "clearChatMessages",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
+          }
+        ],
+        "requestBody": {
+          "required": false,
           "content": {
             "application/json": {
               "schema": {
@@ -1646,352 +4670,147 @@ export const swaggerSpec = {
                     "items": {
                       "type": "object",
                       "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "fromMe": {
+                          "type": "boolean"
+                        },
+                        "timestamp": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "description": "Array of message objects to clear. If omitted, all messages are cleared."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat messages cleared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Chat messages cleared"
+                        },
                         "chatId": {
-                          "type": "string"
-                        },
-                        "contentType": {
-                          "type": "string"
-                        },
-                        "content": {
-                          "type": "object"
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
                         }
                       }
                     }
                   }
-                },
-                "required": [
-                  "messages"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdMessagesSendBulk"
-      }
-    },
-    "/sessions/{sessionId}/messages/{messageId}": {
-      "get": {
-        "tags": [
-          "Messages"
-        ],
-        "summary": "Get message",
-        "description": "Retrieve a specific message",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/MessageIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdMessagesMessageId"
-      },
-      "delete": {
-        "tags": [
-          "Messages"
-        ],
-        "summary": "Delete message",
-        "description": "Delete a message for everyone",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/MessageIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessionsSessionIdMessagesMessageId"
-      }
-    },
-    "/sessions/{sessionId}/messages/{messageId}/edit": {
-      "put": {
-        "tags": [
-          "Messages"
-        ],
-        "summary": "Edit message",
-        "description": "Edit a text message",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/MessageIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "newText": {
-                    "type": "string",
-                    "example": "Updated message text"
-                  }
-                },
-                "required": [
-                  "newText"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "putSessionsSessionIdMessagesMessageIdEdit"
-      }
-    },
-    "/sessions/{sessionId}/messages/{messageId}/react": {
-      "post": {
-        "tags": [
-          "Messages"
-        ],
-        "summary": "React to message",
-        "description": "Add or remove reaction to a message",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/MessageIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "emoji": {
-                    "type": "string",
-                    "example": "👍"
-                  }
-                },
-                "required": [
-                  "emoji"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdMessagesMessageIdReact"
-      }
-    },
-    "/sessions/{sessionId}/messages/{messageId}/star": {
-      "post": {
-        "tags": [
-          "Messages"
-        ],
-        "summary": "Star message",
-        "description": "Star or unstar a message",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/MessageIdParam"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "star": {
-                    "type": "boolean",
-                    "example": true
-                  }
                 }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+        "security": [
+          {
+            "apiKey": []
           }
-        },
-        "operationId": "postSessionsSessionIdMessagesMessageIdStar"
+        ]
       }
     },
-    "/sessions/{sessionId}/messages/{messageId}/forward": {
-      "post": {
-        "tags": [
-          "Messages"
-        ],
-        "summary": "Forward message",
-        "description": "Forward a message to another chat",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/MessageIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "toChatId": {
-                    "type": "string",
-                    "example": "9876543210@s.whatsapp.net"
-                  }
-                },
-                "required": [
-                  "toChatId"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdMessagesMessageIdForward"
-      }
-    },
-    "/sessions/{sessionId}/messages/{messageId}/download": {
+    "/sessions/{sessionId}/chats/{chatId}/labels": {
       "get": {
         "tags": [
-          "Messages"
+          "Chats"
         ],
-        "summary": "Download media",
-        "description": "Download media from a message",
+        "summary": "Get chat labels",
+        "description": "Retrieves all labels associated with the specified chat",
+        "operationId": "getChatLabels",
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           },
           {
-            "$ref": "#/components/parameters/MessageIdParam"
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
           }
         ],
         "responses": {
           "200": {
-            "description": "Media file",
+            "description": "Labels retrieved successfully",
             "content": {
-              "application/octet-stream": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
           }
         },
-        "operationId": "getSessionsSessionIdMessagesMessageIdDownload"
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
       }
     },
-    "/sessions/{sessionId}/messages/send-seen": {
+    "/sessions/{sessionId}/chats/{chatId}/labels/modify": {
       "post": {
         "tags": [
-          "Messages"
+          "Chats"
         ],
-        "summary": "Mark as read",
-        "description": "Mark messages as read",
+        "summary": "Modify chat labels",
+        "description": "Add or remove labels from the specified chat",
+        "operationId": "modifyChatLabels",
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chat ID (JID format)"
           }
         ],
         "requestBody": {
@@ -2000,531 +4819,97 @@ export const swaggerSpec = {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "labelIds",
+                  "action"
+                ],
                 "properties": {
-                  "chatId": {
-                    "type": "string"
-                  },
-                  "messageIds": {
+                  "labelIds": {
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "chatId",
-                  "messageIds"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdMessagesSendSeen"
-      }
-    },
-    "/sessions/{sessionId}/chats": {
-      "get": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "List chats",
-        "description": "Get all chats with pagination",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "schema": {
-              "type": "number",
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "number",
-              "default": 50
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdChats"
-      }
-    },
-    "/sessions/{sessionId}/chats/{chatId}": {
-      "get": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Get chat",
-        "description": "Get specific chat information",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdChatsChatId"
-      },
-      "delete": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Delete chat",
-        "description": "Delete a chat",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessionsSessionIdChatsChatId"
-      }
-    },
-    "/sessions/{sessionId}/chats/{chatId}/messages": {
-      "get": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Get chat messages",
-        "description": "Retrieve messages from a chat",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "schema": {
-              "type": "number",
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "number",
-              "default": 50
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdChatsChatIdMessages"
-      }
-    },
-    "/sessions/{sessionId}/chats/{chatId}/archive": {
-      "post": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Archive chat",
-        "description": "Archive or unarchive a chat",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "archive": {
-                    "type": "boolean",
-                    "example": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdChatsChatIdArchive"
-      }
-    },
-    "/sessions/{sessionId}/chats/{chatId}/pin": {
-      "post": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Pin chat",
-        "description": "Pin or unpin a chat",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "pin": {
-                    "type": "boolean",
-                    "example": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdChatsChatIdPin"
-      }
-    },
-    "/sessions/{sessionId}/chats/{chatId}/mute": {
-      "post": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Mute chat",
-        "description": "Mute or unmute a chat",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "mute": {
-                    "type": "boolean",
-                    "example": true
+                    },
+                    "description": "Array of label IDs to add or remove",
+                    "example": [
+                      "label_1",
+                      "label_2"
+                    ]
                   },
-                  "duration": {
-                    "type": "number",
-                    "description": "Mute duration in milliseconds"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdChatsChatIdMute"
-      }
-    },
-    "/sessions/{sessionId}/chats/{chatId}/mark-read": {
-      "post": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Mark chat as read",
-        "description": "Mark all messages in a chat as read",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdChatsChatIdMarkRead"
-      }
-    },
-    "/sessions/{sessionId}/chats/{chatId}/mark-unread": {
-      "post": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Mark chat as unread",
-        "description": "Mark a chat as unread",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdChatsChatIdMarkUnread"
-      }
-    },
-    "/sessions/{sessionId}/chats/{chatId}/clear": {
-      "post": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Clear chat messages",
-        "description": "Clear all messages from a chat",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdChatsChatIdClear"
-      }
-    },
-    "/sessions/{sessionId}/chats/{chatId}/presence": {
-      "get": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Get presence",
-        "description": "Get presence status (online, offline, typing)",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdChatsChatIdPresence"
-      },
-      "post": {
-        "tags": [
-          "Chats"
-        ],
-        "summary": "Send presence",
-        "description": "Send presence update (composing, recording, paused, available)",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChatIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "state": {
+                  "action": {
                     "type": "string",
                     "enum": [
-                      "composing",
-                      "recording",
-                      "paused",
-                      "available"
-                    ]
+                      "add",
+                      "remove"
+                    ],
+                    "description": "Action to perform: 'add' or 'remove'",
+                    "example": "add"
                   }
-                },
-                "required": [
-                  "state"
-                ]
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+            "description": "Labels modified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chatId": {
+                          "type": "string",
+                          "example": "6281234567890@s.whatsapp.net"
+                        },
+                        "labels": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "label_1",
+                            "label_2"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "operationId": "postSessionsSessionIdChatsChatIdPresence"
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
       }
     },
-    "/sessions/{sessionId}/groups": {
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "List groups",
-        "description": "Get all groups",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdGroups"
-      },
+    "/sessions/{sessionId}/groups/accept-invite": {
       "post": {
         "tags": [
           "Groups"
         ],
-        "summary": "Create group",
-        "description": "Create a new group",
+        "summary": "Accept group invite",
+        "description": "Accept a group invitation using an invite code",
+        "operationId": "acceptGroupInvite",
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           }
         ],
         "requestBody": {
@@ -2533,41 +4918,140 @@ export const swaggerSpec = {
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "My Group"
-                  },
-                  "participants": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
                 "required": [
-                  "name",
-                  "participants"
-                ]
+                  "code"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Group invite code"
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+            "description": "Invite accepted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/invite-info": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Get group invite info",
+        "description": "Retrieve information about a group from an invite code",
+        "operationId": "getGroupInviteInfo",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "code"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Group invite code"
+                  }
+                }
+              }
+            }
           }
         },
-        "operationId": "postSessionsSessionIdGroups"
+        "responses": {
+          "200": {
+            "description": "Group invite information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "List all groups",
+        "description": "Fetch all groups the session is participating in",
+        "operationId": "listAllGroups",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all groups",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/sessions/{sessionId}/groups/{groupId}": {
@@ -2575,31 +5059,442 @@ export const swaggerSpec = {
         "tags": [
           "Groups"
         ],
-        "summary": "Get group info",
-        "description": "Get group metadata and settings",
+        "summary": "Get group metadata",
+        "description": "Retrieve detailed metadata for a specific group",
+        "operationId": "getGroupMetadata",
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           },
           {
-            "$ref": "#/components/parameters/GroupIdParam"
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID (with or without @g.us suffix)"
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Group metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/participants/add": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Add participants",
+        "description": "Add participants to a group",
+        "operationId": "addGroupParticipants",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "participants"
+                ],
+                "properties": {
+                  "participants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of participant JIDs to add"
+                  }
+                }
+              }
+            }
           }
         },
-        "operationId": "getSessionsSessionIdGroupsGroupId"
+        "responses": {
+          "200": {
+            "description": "Participants added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/participants/remove": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Remove participants",
+        "description": "Remove participants from a group",
+        "operationId": "removeGroupParticipants",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "participants"
+                ],
+                "properties": {
+                  "participants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of participant JIDs to remove"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Participants removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/participants/promote": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Promote participants",
+        "description": "Promote participants to admin in a group",
+        "operationId": "promoteGroupParticipants",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "participants"
+                ],
+                "properties": {
+                  "participants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of participant JIDs to promote"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Participants promoted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/participants/demote": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Demote participants",
+        "description": "Demote admin participants to regular members in a group",
+        "operationId": "demoteGroupParticipants",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "participants"
+                ],
+                "properties": {
+                  "participants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of participant JIDs to demote"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Participants demoted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/invite-code": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Get group invite code",
+        "description": "Retrieve the invite code for a group",
+        "operationId": "getGroupInviteCode",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group invite code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "inviteCode": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/revoke-invite": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Revoke group invite",
+        "description": "Revoke the current invite code and generate a new one",
+        "operationId": "revokeGroupInvite",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite revoked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/sessions/{sessionId}/groups/{groupId}/leave": {
@@ -2609,63 +5504,95 @@ export const swaggerSpec = {
         ],
         "summary": "Leave group",
         "description": "Leave a group",
+        "operationId": "leaveGroup",
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           },
           {
-            "$ref": "#/components/parameters/GroupIdParam"
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+            "description": "Left group",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "operationId": "postSessionsSessionIdGroupsGroupIdLeave"
+        }
       }
     },
-    "/sessions/{sessionId}/groups/{groupId}/settings": {
+    "/sessions/{sessionId}/groups/{groupId}/subject": {
       "put": {
         "tags": [
           "Groups"
         ],
-        "summary": "Update group settings",
-        "description": "Update group settings (name, description, announcement mode)",
+        "summary": "Update group subject",
+        "description": "Update the subject (name) of a group",
+        "operationId": "updateGroupSubject",
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           },
           {
-            "$ref": "#/components/parameters/GroupIdParam"
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "subject"
+                ],
                 "properties": {
                   "subject": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  },
-                  "announce": {
-                    "type": "boolean"
-                  },
-                  "locked": {
-                    "type": "boolean"
+                    "type": "string",
+                    "description": "New group subject"
                   }
                 }
               }
@@ -2674,19 +5601,103 @@ export const swaggerSpec = {
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Group subject updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/description": {
+      "put": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Update group description",
+        "description": "Update the description of a group",
+        "operationId": "updateGroupDescription",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "description"
+                ],
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "description": "New group description"
+                  }
+                }
+              }
+            }
           }
         },
-        "operationId": "putSessionsSessionIdGroupsGroupIdSettings"
+        "responses": {
+          "200": {
+            "description": "Group description updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/sessions/{sessionId}/groups/{groupId}/picture": {
@@ -2695,174 +5706,26 @@ export const swaggerSpec = {
           "Groups"
         ],
         "summary": "Update group picture",
-        "description": "Update group profile picture",
+        "description": "Update the profile picture of a group",
+        "operationId": "updateGroupPicture",
         "parameters": [
           {
-            "$ref": "#/components/parameters/SessionIdParam"
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
           },
           {
-            "$ref": "#/components/parameters/GroupIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "image": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                },
-                "required": [
-                  "image"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "putSessionsSessionIdGroupsGroupIdPicture"
-      },
-      "delete": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Remove group picture",
-        "description": "Remove group profile picture",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/GroupIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessionsSessionIdGroupsGroupIdPicture"
-      }
-    },
-    "/sessions/{sessionId}/groups/{groupId}/invite-code": {
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Get invite code",
-        "description": "Get group invite code/link",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/GroupIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdGroupsGroupIdInviteCode"
-      },
-      "post": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Revoke invite code",
-        "description": "Revoke and generate new invite code",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/GroupIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdGroupsGroupIdInviteCode"
-      }
-    },
-    "/sessions/{sessionId}/groups/{groupId}/participants": {
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Get participants",
-        "description": "Get group participants list",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/GroupIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdGroupsGroupIdParticipants"
-      },
-      "post": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Add participants",
-        "description": "Add participants to group",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/GroupIdParam"
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
           }
         ],
         "requestBody": {
@@ -2871,567 +5734,17 @@ export const swaggerSpec = {
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {
-                  "participants": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
                 "required": [
-                  "participants"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdGroupsGroupIdParticipants"
-      },
-      "delete": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Remove participants",
-        "description": "Remove participants from group",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/GroupIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
+                  "content"
+                ],
                 "properties": {
-                  "participants": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "participants"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessionsSessionIdGroupsGroupIdParticipants"
-      }
-    },
-    "/sessions/{sessionId}/groups/{groupId}/admins": {
-      "post": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Promote to admin",
-        "description": "Promote participants to admin",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/GroupIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "participants": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "participants"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdGroupsGroupIdAdmins"
-      },
-      "delete": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Demote from admin",
-        "description": "Demote admins to regular participants",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/GroupIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "participants": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "participants"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessionsSessionIdGroupsGroupIdAdmins"
-      }
-    },
-    "/sessions/{sessionId}/groups/join": {
-      "post": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Join group via invite",
-        "description": "Join a group using invite code",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "inviteCode": {
-                    "type": "string",
-                    "example": "ABC123XYZ"
-                  }
-                },
-                "required": [
-                  "inviteCode"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdGroupsJoin"
-      }
-    },
-    "/sessions/{sessionId}/contacts": {
-      "get": {
-        "tags": [
-          "Contacts"
-        ],
-        "summary": "List contacts",
-        "description": "Get all contacts",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdContacts"
-      }
-    },
-    "/sessions/{sessionId}/contacts/{contactId}": {
-      "get": {
-        "tags": [
-          "Contacts"
-        ],
-        "summary": "Get contact",
-        "description": "Get contact information",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ContactIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdContactsContactId"
-      }
-    },
-    "/sessions/{sessionId}/contacts/check": {
-      "post": {
-        "tags": [
-          "Contacts"
-        ],
-        "summary": "Check if number is on WhatsApp",
-        "description": "Check if phone number is registered on WhatsApp",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "phoneNumber": {
-                    "type": "string",
-                    "example": "1234567890"
-                  }
-                },
-                "required": [
-                  "phoneNumber"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdContactsCheck"
-      }
-    },
-    "/sessions/{sessionId}/channels": {
-      "get": {
-        "tags": [
-          "Channels"
-        ],
-        "summary": "List channels",
-        "description": "Get all subscribed newsletters/channels",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdChannels"
-      },
-      "post": {
-        "tags": [
-          "Channels"
-        ],
-        "summary": "Create channel",
-        "description": "Create a new newsletter/channel",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "My Newsletter"
+                  "content": {
+                    "type": "object",
+                    "description": "Image content (base64, URL, or buffer)"
                   },
-                  "description": {
-                    "type": "string",
-                    "example": "Newsletter description"
-                  }
-                },
-                "required": [
-                  "name"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdChannels"
-      }
-    },
-    "/sessions/{sessionId}/channels/{channelId}": {
-      "get": {
-        "tags": [
-          "Channels"
-        ],
-        "summary": "Get channel info",
-        "description": "Get newsletter/channel metadata",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChannelIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "getSessionsSessionIdChannelsChannelId"
-      },
-      "delete": {
-        "tags": [
-          "Channels"
-        ],
-        "summary": "Delete channel",
-        "description": "Delete a newsletter/channel",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChannelIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "deleteSessionsSessionIdChannelsChannelId"
-      }
-    },
-    "/sessions/{sessionId}/channels/{channelId}/follow": {
-      "post": {
-        "tags": [
-          "Channels"
-        ],
-        "summary": "Follow channel",
-        "description": "Subscribe to a newsletter/channel",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChannelIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdChannelsChannelIdFollow"
-      }
-    },
-    "/sessions/{sessionId}/channels/{channelId}/unfollow": {
-      "post": {
-        "tags": [
-          "Channels"
-        ],
-        "summary": "Unfollow channel",
-        "description": "Unsubscribe from a newsletter/channel",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChannelIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        },
-        "operationId": "postSessionsSessionIdChannelsChannelIdUnfollow"
-      }
-    },
-    "/sessions/{sessionId}/channels/{channelId}/mute": {
-      "post": {
-        "tags": [
-          "Channels"
-        ],
-        "summary": "Mute channel",
-        "description": "Mute or unmute a newsletter/channel",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SessionIdParam"
-          },
-          {
-            "$ref": "#/components/parameters/ChannelIdParam"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "mute": {
-                    "type": "boolean",
-                    "example": true
+                  "options": {
+                    "type": "object",
+                    "description": "Optional media preparation options"
                   }
                 }
               }
@@ -3440,16 +5753,2437 @@ export const swaggerSpec = {
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Group picture updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Delete group picture",
+        "description": "Remove the profile picture from a group",
+        "operationId": "deleteGroupPicture",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group picture removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/settings/messages-admins-only": {
+      "put": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Set messages admins only",
+        "description": "Configure whether only admins can send messages",
+        "operationId": "setMessagesAdminsOnly",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Enable or disable messages admins only (default: true)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Setting updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        },
+                        "mode": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/settings/info-admins-only": {
+      "put": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Set info admins only",
+        "description": "Configure whether only admins can edit group info",
+        "operationId": "setInfoAdminsOnly",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Enable or disable info admins only (default: true)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Setting updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        },
+                        "mode": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/membership-requests": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Get membership requests",
+        "description": "Retrieve pending membership requests for a group",
+        "operationId": "getMembershipRequests",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of membership requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/membership-requests/approve": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Approve membership requests",
+        "description": "Approve pending membership requests for a group",
+        "operationId": "approveMembershipRequests",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "participants"
+                ],
+                "properties": {
+                  "participants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of participant JIDs to approve"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Requests approved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/membership-requests/reject": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Reject membership requests",
+        "description": "Reject pending membership requests for a group",
+        "operationId": "rejectMembershipRequests",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "participants"
+                ],
+                "properties": {
+                  "participants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of participant JIDs to reject"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Requests rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/groups/{groupId}/test-mention-all": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Test mention all methods",
+        "description": "Debug endpoint to test three different methods of mentioning all participants in a group",
+        "operationId": "testMentionAllMethods",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ID"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group ID"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Custom message to include in test (default: 'Test mention all method')"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Test completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "messagesSent": {
+                          "type": "number"
+                        },
+                        "mentionCount": {
+                          "type": "number"
+                        },
+                        "methods": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/contacts/info": {
+      "post": {
+        "summary": "Get contact information",
+        "description": "Retrieve contact information from the store",
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "The JID (Jabber ID) of the contact"
+                  }
+                },
+                "required": [
+                  "jid"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/contacts/block": {
+      "post": {
+        "summary": "Block a contact",
+        "description": "Block a contact from messaging",
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "The JID of the contact to block"
+                  }
+                },
+                "required": [
+                  "jid"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact blocked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        },
+                        "result": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/contacts/unblock": {
+      "post": {
+        "summary": "Unblock a contact",
+        "description": "Unblock a previously blocked contact",
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "The JID of the contact to unblock"
+                  }
+                },
+                "required": [
+                  "jid"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact unblocked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        },
+                        "result": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/contacts/about": {
+      "post": {
+        "summary": "Get contact about/status",
+        "description": "Fetch the about/status text of a contact",
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "The JID of the contact"
+                  }
+                },
+                "required": [
+                  "jid"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/contacts/chat": {
+      "post": {
+        "summary": "Get contact chat",
+        "description": "Retrieve chat history/metadata for a contact",
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "The JID of the contact"
+                  }
+                },
+                "required": [
+                  "jid"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact chat retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": [
+                        "object",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/contacts/profile-picture": {
+      "post": {
+        "summary": "Get contact profile picture",
+        "description": "Retrieve the profile picture URL of a contact",
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "The JID of the contact"
+                  }
+                },
+                "required": [
+                  "jid"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile picture URL retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/contacts/formatted-number": {
+      "post": {
+        "summary": "Get formatted phone number",
+        "description": "Get the formatted phone number from a JID",
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "The JID of the contact"
+                  }
+                },
+                "required": [
+                  "jid"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Formatted number retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "formattedNumber": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/contacts/country-code": {
+      "post": {
+        "summary": "Get contact country code",
+        "description": "Extract the country code from a contact's JID",
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "The JID of the contact"
+                  }
+                },
+                "required": [
+                  "jid"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Country code retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "countryCode": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/contacts/common-groups": {
+      "post": {
+        "summary": "Get common groups with contact",
+        "description": "Retrieve groups that both the user and contact are members of",
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The session ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "The JID of the contact"
+                  }
+                },
+                "required": [
+                  "jid"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Common groups retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/info": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Get newsletter information",
+        "description": "Retrieve metadata for a newsletter channel by JID or invite code",
+        "operationId": "getNewsletterInfo",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "key"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "jid",
+                      "invite"
+                    ],
+                    "description": "Lookup type: 'jid' for direct JID or 'invite' for invite code"
+                  },
+                  "key": {
+                    "type": "string",
+                    "description": "The JID or invite code depending on type"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Newsletter metadata retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Newsletter metadata object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/send-message": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Send message to newsletter",
+        "description": "Send a message to a newsletter channel",
+        "operationId": "sendMessageToNewsletter",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid",
+                  "content"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  },
+                  "content": {
+                    "type": "object",
+                    "description": "Message content object (Baileys format)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Send result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/fetch-messages": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Fetch newsletter messages",
+        "description": "Retrieve messages from a newsletter channel",
+        "operationId": "fetchNewsletterMessages",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  },
+                  "count": {
+                    "type": "number",
+                    "description": "Number of messages to fetch",
+                    "default": 10
+                  },
+                  "since": {
+                    "type": "number",
+                    "description": "Fetch messages since this timestamp",
+                    "default": 0
+                  },
+                  "after": {
+                    "type": "number",
+                    "description": "Fetch messages after this message ID",
+                    "default": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Messages retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Messages array"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/send-seen": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Mark newsletter messages as read",
+        "description": "Send read receipts for newsletter messages",
+        "operationId": "sendSeenToNewsletter",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "keys"
+                ],
+                "properties": {
+                  "keys": {
+                    "type": "array",
+                    "description": "Array of message keys to mark as read",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Messages marked as read",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Messages marked as read"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/mute": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Mute newsletter",
+        "description": "Mute notifications from a newsletter channel",
+        "operationId": "muteNewsletter",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Newsletter muted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/unmute": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Unmute newsletter",
+        "description": "Unmute notifications from a newsletter channel",
+        "operationId": "unmuteNewsletter",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Newsletter unmuted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/set-profile-picture": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Set newsletter profile picture",
+        "description": "Update the profile picture for a newsletter channel",
+        "operationId": "setNewsletterProfilePicture",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid",
+                  "content"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  },
+                  "content": {
+                    "type": "object",
+                    "description": "Image content object"
+                  },
+                  "options": {
+                    "type": "object",
+                    "description": "Media options"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile picture updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Newsletter picture updated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/set-description": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Set newsletter description",
+        "description": "Update the description for a newsletter channel",
+        "operationId": "setNewsletterDescription",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid",
+                  "description"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "New description text"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Newsletter description updated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/set-subject": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Set newsletter subject/name",
+        "description": "Update the name/subject for a newsletter channel",
+        "operationId": "setNewsletterSubject",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid",
+                  "name"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "New newsletter name"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Name updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Newsletter name updated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/{channelId}": {
+      "delete": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Delete newsletter",
+        "description": "Delete a newsletter channel",
+        "operationId": "deleteNewsletter",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          },
+          {
+            "name": "channelId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Channel ID (with or without @newsletter suffix)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Newsletter deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Newsletter deleted"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/subscribers": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Get newsletter subscribers",
+        "description": "Retrieve the list of subscribers for a newsletter channel",
+        "operationId": "getNewsletterSubscribers",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscribers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Subscribers list"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/set-reaction-setting": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Set newsletter reaction setting",
+        "description": "Configure reaction permissions for a newsletter channel",
+        "operationId": "setNewsletterReactionSetting",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid",
+                  "mode"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  },
+                  "mode": {
+                    "type": "string",
+                    "description": "Reaction mode setting"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reaction setting updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Newsletter reaction setting updated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
+          "501": {
+            "description": "Not supported in this Baileys version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "newsletterReactionMode is not supported in this Baileys version"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/admin/invite": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Invite users to newsletter (Admin)",
+        "description": "Invite participants to a newsletter channel (requires admin permissions)",
+        "operationId": "inviteToNewsletter",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid",
+                  "participants"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  },
+                  "participants": {
+                    "type": "array",
+                    "description": "Array of participant JIDs to invite",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "operationId": "postSessionsSessionIdChannelsChannelIdMute"
+        "responses": {
+          "200": {
+            "description": "Invites sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Invite result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "501": {
+            "description": "Not supported in this Baileys version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Newsletter invite functionality is not supported in this Baileys version"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/admin/accept-invite": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Accept newsletter invite (Admin)",
+        "description": "Accept an invite to join a newsletter channel using an invite code",
+        "operationId": "acceptNewsletterInvite",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "code"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Newsletter invite code"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Invite accepted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Accept result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "501": {
+            "description": "Not supported in this Baileys version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Newsletter accept invite functionality is not supported in this Baileys version"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/admin/revoke-invite": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Revoke newsletter invite (Admin)",
+        "description": "Revoke outstanding invites for a newsletter channel",
+        "operationId": "revokeNewsletterInvite",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Invite revoked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Revoke result"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "501": {
+            "description": "Not supported in this Baileys version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Newsletter revoke invite functionality is not supported in this Baileys version"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/admin/transfer-ownership": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Transfer newsletter ownership (Admin)",
+        "description": "Transfer ownership of a newsletter channel to another user",
+        "operationId": "transferNewsletterOwnership",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid",
+                  "newOwnerJid"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  },
+                  "newOwnerJid": {
+                    "type": "string",
+                    "description": "JID of the new owner"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ownership transferred successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Newsletter ownership transferred"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/channels/admin/demote": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Demote newsletter admin (Admin)",
+        "description": "Remove admin privileges from a user in a newsletter channel",
+        "operationId": "demoteNewsletterAdmin",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "WhatsApp session identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jid",
+                  "userJid"
+                ],
+                "properties": {
+                  "jid": {
+                    "type": "string",
+                    "description": "Newsletter JID (must end with @newsletter)",
+                    "example": "120363123456789012@newsletter"
+                  },
+                  "userJid": {
+                    "type": "string",
+                    "description": "JID of the user to demote"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Admin demoted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Admin demoted"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
       }
     }
   }
