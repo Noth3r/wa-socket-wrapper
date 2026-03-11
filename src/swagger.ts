@@ -328,6 +328,10 @@ export const swaggerSpec = {
                 "items": {
                   "type": "string"
                 }
+              },
+              "mentionAll": {
+                "type": "boolean",
+                "description": "When true, mentions all participants in a group chat (@all). Overrides individual mentions."
               }
             }
           }
