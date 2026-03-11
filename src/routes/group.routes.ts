@@ -23,6 +23,7 @@ import {
   acceptInvite,
   getInviteInfo,
   listAllGroups,
+  testMentionAllMethods,
 } from '../controllers/group.controller.js';
 
 const router = Router({ mergeParams: true });
@@ -57,5 +58,7 @@ router.put('/:groupId/settings/info-admins-only', asyncHandler(setInfoAdminsOnly
 router.get('/:groupId/membership-requests', asyncHandler(getMembershipRequests));
 router.post('/:groupId/membership-requests/approve', asyncHandler(approveMembershipRequests));
 router.post('/:groupId/membership-requests/reject', asyncHandler(rejectMembershipRequests));
+router.post('/:groupId/test-mention-all', asyncHandler(testMentionAllMethods));
+
 
 export default router;

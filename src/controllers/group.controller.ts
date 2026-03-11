@@ -214,3 +214,53 @@ export async function listAllGroups(req: Request, res: Response): Promise<void> 
   const result = await (session.socket as any).groupFetchAllParticipating();
   sendSuccess(res, result);
 }
+
+export async function testMentionAllMethods(req: Request, res: Response): Promise<void> {
+  const session = sessionManager.getSession(getSessionId(req));
+  const groupJid = getGroupJid(req);
+  const metadata = await (session.socket as any).groupMetadata(groupJid);
+  
+  const participants = metadata.participants.map((p: any) => p.id);
+  const messageBase = req.body?.message || 'Test mention all method';
+  const mentionText = participants.map((jid: string) => `@${jid.split('@')[0]}`).join(' ');
+  
+  const message1 = {
+    text: `🧪 TEST Method 1: mentions array only\n${mentionText}\n${messageBase}`,
+    mentions: participants,
+  };
+  await (session.socket as any).sendMessage(groupJid, { text: message1.text }, { mentions: message1.mentions });
+  
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  
+  const message2 = {
+    text: `🧪 TEST Method 2: groupMentions only - ${messageBase}`,
+    contextInfo: {
+      groupMentions: [{
+        groupJid: groupJid,
+        groupSubject: metadata.subject,
+      }],
+    },
+  };
+  await (session.socket as any).sendMessage(groupJid, { text: message2.text, contextInfo: message2.contextInfo });
+  
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  
+  const message3 = {
+    text: `🧪 TEST Method 3: hybrid (both)\n${mentionText}\n${messageBase}`,
+    mentions: participants,
+    contextInfo: {
+      groupMentions: [{
+        groupJid: groupJid,
+        groupSubject: metadata.subject,
+      }],
+    },
+  };
+  await (session.socket as any).sendMessage(groupJid, { text: message3.text, contextInfo: message3.contextInfo }, { mentions: message3.mentions });
+  
+  sendSuccess(res, {
+    success: true,
+    messagesSent: 3,
+    mentionCount: participants.length,
+    methods: ['mentions', 'groupMentions', 'hybrid'],
+  });
+}
