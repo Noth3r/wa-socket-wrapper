@@ -73,17 +73,17 @@ router.post('/:sessionId/pairing-code', validateSessionId, asyncHandler(requestP
 router.post('/:sessionId/restart', validateSessionId, asyncHandler(restartSession));
 
 /**
+ * Delete all inactive sessions
+ * DELETE /api/sessions/inactive
+ * Must be before /:sessionId to avoid matching "inactive" as a sessionId
+ */
+router.delete('/inactive', asyncHandler(deleteInactiveSessions));
+
+/**
  * Delete/terminate a specific session
  * DELETE /api/sessions/:sessionId
  */
 router.delete('/:sessionId', validateSessionId, asyncHandler(deleteSession));
-
-/**
- * Delete all inactive sessions
- * DELETE /api/sessions/inactive
- * Must be before /:sessionId routes to match before parameterized route
- */
-router.delete('/inactive', asyncHandler(deleteInactiveSessions));
 
 /**
  * Delete all sessions
